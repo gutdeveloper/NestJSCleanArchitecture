@@ -15,7 +15,7 @@ export class PrismaUserRepository implements UserRepository {
             });
 
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw new Error("Error registering user");
         }
     }
@@ -29,7 +29,7 @@ export class PrismaUserRepository implements UserRepository {
             if (!user) return null;
             return user;
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw new Error("Error finding user by email");
         }
 
@@ -43,7 +43,7 @@ export class PrismaUserRepository implements UserRepository {
             if (!user) return null;
             return user;
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw new Error("Error finding user by id");
         }
     }

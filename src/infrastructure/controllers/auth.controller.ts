@@ -26,7 +26,7 @@ export class AuthController {
         return await this.authUseCase.registerUser({ name, email, password });
     }
 
-    @Roles(Role.User)
+    @Roles(Role.USER)
     @Get("/profile")
     async userProfile(@Req() req: any) {
         const userId = req.user.id;

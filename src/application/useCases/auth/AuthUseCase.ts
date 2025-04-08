@@ -18,14 +18,14 @@ export class AuthUseCase {
     ) { }
 
     async loginUser(email: string, password: string): Promise<string> {
-        const userExists = await this.userRepository.findByEmail(email);
-        if (!userExists) throw new NotFoundError("User not found");
-        const user = new User({ ...userExists });
-        if (!user.emailVerified()) throw new ForbiddenError("Email not verified");
+        const user = await this.userRepository.findByEmail(email);
+        if (!user) throw new NotFoundError("User not found");
+        const userEntity = new User({ ...user });
+        if (!userEntity.emailVerified()) throw new ForbiddenError("Email not verified");
         const isValidPassword = await this.passwordHash.compare(password, user.password);
         if (!isValidPassword) throw new UnauthorizedError("Invalid password");
-        if (!user.isActive()) throw new ForbiddenError("User is not active");
-        const accesstoken = this.tokenService.generate(user.id!);
+        if (!userEntity.isActive()) throw new ForbiddenError("User is not active");
+        const accesstoken = this.tokenService.generate(user.id);
         return accesstoken;
     }
 
@@ -34,8 +34,8 @@ export class AuthUseCase {
         const user = await this.userRepository.findByEmail(email);
         if (user) throw new ConflictError('User already exists');
         const passwordHashed = await this.passwordHash.hash(password);
-        const newUser = new User({ name, email, password: passwordHashed });
-        const userRegistered = await this.userRepository.register(newUser);
+        const userEntity = new User({ name, email, password: passwordHashed });
+        const userRegistered = await this.userRepository.register(userEntity);
         this.emailService.sendEmailActivation(userRegistered.email, userRegistered.name);
         return { email: userRegistered.email };
     }
