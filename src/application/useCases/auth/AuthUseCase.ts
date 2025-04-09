@@ -25,7 +25,7 @@ export class AuthUseCase {
         const isValidPassword = await this.passwordHash.compare(password, user.password);
         if (!isValidPassword) throw new UnauthorizedError("Invalid password");
         if (!userEntity.isActive()) throw new ForbiddenError("User is not active");
-        const accesstoken = this.tokenService.generate(user.id);
+        const accesstoken = this.tokenService.generate({ id: user.id, role: user.role });
         return accesstoken;
     }
 

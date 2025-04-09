@@ -5,9 +5,10 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class JwtService implements TokenService {
     constructor(private readonly jwtService: NestJwtService) { }
-    generate(id: string): string {
+    generate(payload: Record<string, any>): string {
         try {
-            return this.jwtService.sign({ id });
+            const { id, role } = payload;
+            return this.jwtService.sign({ id, role });
         } catch (error) {
             console.error('Error generating token:', error);
             throw new Error('Error generating token');

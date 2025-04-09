@@ -3,6 +3,7 @@ import { UserRepository } from "src/domain/repositories/UserRepository";
 import { PrismaService } from "../services/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { IUser } from "src/domain/interfaces/user.interface";
+import { Role } from "src/domain/enums/role.enum";
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -20,14 +21,18 @@ export class PrismaUserRepository implements UserRepository {
         }
     }
 
-    async findByEmail(email: string): Promise<Omit<IUser, "role"> | null> {
+    async findByEmail(email: string): Promise<IUser | null> {
         try {
             const user = await this.prisma.user.findUnique({
                 where: { email },
-                select: { id: true, name: true, email: true, password: true, email_verified: true, active: true },
+                select: {
+                    id: true, name: true, email: true,
+                    password: true, email_verified: true,
+                    active: true, role: true
+                },
             });
             if (!user) return null;
-            return user;
+            return { ...user, role: user.role as Role };
         } catch (error) {
             console.error(error);
             throw new Error("Error finding user by email");

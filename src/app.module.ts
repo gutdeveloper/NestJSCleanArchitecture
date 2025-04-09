@@ -6,23 +6,13 @@ import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthGuard } from './infrastructure/guards/auth.guard';
 import { JwtModule } from '@nestjs/jwt';
+import { RolesGuard } from './infrastructure/guards/roles.guard';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // JwtModule.registerAsync({
-    //   imports: [ConfigModule],
-    //   inject: [ConfigService],
-    //   useFactory: (configService: ConfigService) => ({
-    //     secret: configService.get<string>('JWT_SECRET'),
-    //     signOptions: {
-    //       expiresIn: configService.get<string>('JWT_EXPIRATION'),
-    //       algorithm: 'HS256',
-    //     },
-    //   }),
-    // }),
     ThrottlerModule.forRoot({
       throttlers: [
         {
@@ -42,7 +32,10 @@ import { JwtModule } from '@nestjs/jwt';
       provide: APP_GUARD,
       useClass: AuthGuard,
     },
+    {
+      provide: APP_GUARD,
+      useClass: RolesGuard
+    }
   ],
-  // exports: [JwtModule],
 })
 export class AppModule { }
