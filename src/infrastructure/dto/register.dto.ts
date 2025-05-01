@@ -3,7 +3,12 @@ export class RegisterUserDTO {
     @IsString()
     @MaxLength(50)
     @MinLength(3)
-    name: string;
+    first_name: string;
+
+    @IsString()
+    @MaxLength(50)
+    @MinLength(3)
+    last_name: string;
 
     @IsEmail()
     @IsString()

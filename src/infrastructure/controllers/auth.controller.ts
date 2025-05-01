@@ -22,8 +22,8 @@ export class AuthController {
     @Public()
     @Post("/register")
     async registerUser(@Body() body: RegisterUserDTO) {
-        const { name, email, password } = body;
-        return await this.authUseCase.registerUser({ name, email, password });
+        const { first_name, last_name, email, password } = body;
+        return await this.authUseCase.registerUser({ first_name, last_name, email, password });
     }
 
     @Roles(Role.USER)
