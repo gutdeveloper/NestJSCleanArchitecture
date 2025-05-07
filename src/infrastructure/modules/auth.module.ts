@@ -9,10 +9,8 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthUseCaseProvider } from "../providers/auth.usecase.provider";
 import { INJECTION_TOKENS } from "../constants/injection-tokens.constants";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { AuthUseCase } from "src/application/useCases/auth/AuthUseCase";
 
 @Module({
-    // imports: [JwtModule],
     imports: [
         JwtModule.registerAsync({
             imports: [ConfigModule],

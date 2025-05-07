@@ -20,9 +20,9 @@ export class AuthUseCase {
     async loginUser(email: string, password: string): Promise<string> {
         const user = await this.userRepository.findByEmail(email);
         if (!user) throw new NotFoundError("User not found");
-        const userEntity = new User({ ...user });
+        const userEntity = new User({ ...user });        
         if (!userEntity.isEmailVerified()) throw new ForbiddenError("Email not verified");
-        const isValidPassword = await this.passwordHash.compare(password, user.password);
+        const isValidPassword = await this.passwordHash.compare(password, user.password);        
         if (!isValidPassword) throw new UnauthorizedError("Invalid password");
         if (!userEntity.isActive()) throw new ForbiddenError("User is not active");
         const accesstoken = this.tokenService.generate({ id: user.id, role: user.role });

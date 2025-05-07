@@ -5,6 +5,7 @@ import { Injectable } from "@nestjs/common";
 @Injectable()
 export class JwtService implements TokenService {
     constructor(private readonly jwtService: NestJwtService) { }
+    
     generate(payload: Record<string, any>): string {
         try {
             const { id, role } = payload;
@@ -14,10 +15,17 @@ export class JwtService implements TokenService {
             throw new Error('Error generating token');
         }
     }
-    verify(token: string): string {
+
+    verify(token: string): { id: string; role: string } {
         try {
+            if (!token) {
+                throw new Error('Token is required');
+            }
             const verify = this.jwtService.verify(token);
-            return verify;
+            if (!verify) {
+                throw new Error('Invalid token payload');
+            }
+            return { id: verify.id, role: verify.role };
         } catch (error) {
             console.error('Error verifying token:', error);
             throw new Error('Invalid token');

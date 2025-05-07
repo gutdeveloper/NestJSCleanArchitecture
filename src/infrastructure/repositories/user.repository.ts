@@ -4,6 +4,7 @@ import { PrismaService } from "../services/prisma.service";
 import { Injectable } from "@nestjs/common";
 import { IUser } from "src/domain/interfaces/user.interface";
 import { Role } from "src/domain/enums/role.enum";
+import { Prisma } from "@prisma/client";
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -22,9 +23,8 @@ export class PrismaUserRepository implements UserRepository {
                 },
                 select: { email: true, first_name: true, last_name: true },
             });
-        } catch (error) {
-            console.error(error);
-            throw new Error("Error registering user");
+        } catch (error) {            
+            throw new Error('Error registering user');
         }
     }
 
@@ -41,8 +41,7 @@ export class PrismaUserRepository implements UserRepository {
             if (!user) return null;
             return { ...user, role: user.role as Role };
         } catch (error) {
-            console.error(error);
-            throw new Error("Error finding user by email");
+            throw new Error('Error finding user by email');
         }
     }
 
@@ -55,8 +54,7 @@ export class PrismaUserRepository implements UserRepository {
             if (!user) return null;
             return { ...user };
         } catch (error) {
-            console.error(error);
-            throw new Error("Error finding user by id");
+            throw new Error('Error finding user by id');
         }
     }
 }

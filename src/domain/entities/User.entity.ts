@@ -36,10 +36,10 @@ export class User {
             throw new Error("Password must be at least 6 characters long");
         }
 
-        this.id = props.id || crypto.randomUUID();
+        this.id = props.id || '';
         this.first_name = props.first_name.trim();
         this.last_name = props.last_name.trim();
-        this.email = props.email.toLowerCase();
+        this.email = props.email.toLowerCase().trim();
         this.password = props.password;
         this.email_verified = props.email_verified || false;
         this.active = props.active ?? true;

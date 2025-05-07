@@ -99,10 +99,10 @@ describe('AuthUseCase', () => {
 
         it('should throw ForbiddenError when user is not active', async () => {
             mockUserRepository.findByEmail.mockResolvedValue({ ...mockUser, active: false });
-
+            mockPasswordHash.compare.mockResolvedValue(true);            
             await expect(authUseCase.loginUser('john@example.com', 'password123'))
                 .rejects
-                .toThrow(NotFoundError);
+                .toThrow(ForbiddenError);
         });
     });
 

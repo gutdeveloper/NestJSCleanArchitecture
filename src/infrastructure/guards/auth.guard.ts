@@ -1,4 +1,3 @@
-
 import {
     CanActivate,
     ExecutionContext,
@@ -30,6 +29,9 @@ export class AuthGuard implements CanActivate {
         }
         try {
             const payload = this.jwtService.verify(token);
+            if (!payload) {
+                throw new UnauthorizedException();
+            }
             request['user'] = payload;
         } catch {
             throw new UnauthorizedException();
